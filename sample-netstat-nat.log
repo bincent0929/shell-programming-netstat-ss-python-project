@@ -1,0 +1,13 @@
+Proto NATed Address                  Destination Address            State
+tcp   192.168.1.101:51834            142.250.72.14:https            ESTABLISHED
+tcp   192.168.1.101:51840            142.250.72.14:https            ESTABLISHED
+tcp   192.168.1.102:44322            93.184.216.34:http             TIME_WAIT
+tcp   192.168.1.103:39012            151.101.1.140:https            ESTABLISHED
+tcp   192.168.1.102:44510            93.184.216.34:http             ESTABLISHED
+tcp   192.168.1.104:60123            140.82.112.3:ssh               ESTABLISHED
+tcp   192.168.1.101:51920            151.101.1.140:https            CLOSE_WAIT
+tcp   192.168.1.103:39044            142.250.72.14:https            ESTABLISHED
+tcp   192.168.1.102:44612            142.250.72.14:https            TIME_WAIT
+udp   192.168.1.105:5353             224.0.0.251:mdns               ASSURED
+udp   192.168.1.101:40000            8.8.8.8:domain                 ASSURED
+udp   192.168.1.103:40512            8.8.8.8:domain                 ASSURED
