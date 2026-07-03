@@ -38,6 +38,9 @@ def capture_live(lines):
         return False
     if result.returncode != 0:
         return False
+    # grabs the standard output and
+    # saves each line from it into an
+    # entry in a lines list
     lines.extend(result.stdout.splitlines())
     return True
 
@@ -46,6 +49,7 @@ def read_log(path, lines):
     """Read a log file, append its lines to 'lines', report success."""
     try:
         with open(path) as log:
+            # saves each line as an entry in a list
             lines.extend(log.read().splitlines())
     except OSError:
         return False
@@ -57,10 +61,11 @@ def parse_connections(lines, wanted_proto):
     connections = []
     for line in lines:
         parts = line.split()
+        # this parses the data lines
+        # tcp  192.168.1.101:51834  142.250.72.14:https  ESTABLISHED
+        # the header is never parsed
         if len(parts) >= 4 and parts[0] in ("tcp", "udp"):
             connection = (parts[0], parts[1], parts[2], parts[3])
-        elif len(parts) >= 5 and parts[0].isupper() and ":" in parts[3]:
-            connection = ("tcp", parts[3], parts[4], parts[0])
         else:
             continue
         if wanted_proto in (None, connection[0]):
@@ -133,6 +138,8 @@ def main():
     if mode not in ("summary", "top"):
         usage("unknown mode: " + mode)
 
+    # feeds in the option values from the args
+    # using a dictionary.
     options = {"--file": None, "--proto": None, "--count": "5", "--report": None}
     position = 1
     while position < len(arguments):
@@ -144,14 +151,18 @@ def main():
         options[name] = arguments[position + 1]
         position += 2
 
-    if options["--proto"] not in (None, "tcp", "udp"):
-        usage("--proto must be tcp or udp")
+    # Checks proto and count option validity
+    if options["--proto"] not in (None, "tcp", "udp"):  # should none be here??
+        usage("--proto must be tcp or udp")  # None just isn't udp nor tcp
     if not options["--count"].isdigit() or int(options["--count"]) < 1:
         usage("--count must be a whole number above zero")
 
-    lines = []
+    # grabs the data from the logfile and/or captures live data
+    lines = []  # the data is saved here. loaded is only used for error checking
     if options["--file"] is not None:
         source = options["--file"]
+        # if statements don't create their own scope
+        # loaded is main() scoped.
         loaded = read_log(source, lines)
     else:
         source = "live capture (ss -tan)"
